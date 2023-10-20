@@ -22,7 +22,7 @@ namespace DTAClient.DXGUI
     /// Also enables power-saving (lowers FPS) while a game is in progress,
     /// and performs various operations on game start and exit.
     /// </summary>
-    public class GameInProgressWindow : XNAPanel
+    public class GameInProgressWindow : INItializableWindow
     {
         private const double POWER_SAVING_FPS = 5.0;
 
@@ -45,34 +45,17 @@ namespace DTAClient.DXGUI
             if (initialized)
                 throw new InvalidOperationException("GameInProgressWindow cannot be initialized twice!");
 
-            initialized = true;
-
+            Name = nameof(GameInProgressWindow);
             BackgroundTexture = AssetLoader.CreateTexture(new Color(0, 0, 0, 128), 1, 1);
             PanelBackgroundDrawMode = PanelBackgroundImageDrawMode.STRETCHED;
             DrawBorders = false;
             ClientRectangle = new Rectangle(0, 0, WindowManager.RenderResolutionX, WindowManager.RenderResolutionY);
 
-            XNAWindow window = new XNAWindow(WindowManager);
-
-            window.Name = "GameInProgressWindow";
-            window.BackgroundTexture = AssetLoader.LoadTexture("gameinprogresswindowbg.png");
-            window.ClientRectangle = new Rectangle(0, 0, 200, 100);
-
-            XNALabel explanation = new XNALabel(WindowManager);
-            explanation.Text = "A game is in progress.".L10N("Client:Main:GameInProgress");
-
-            AddChild(window);
-
-            window.AddChild(explanation);
-
             base.Initialize();
+            initialized = true;
 
             GameProcessLogic.GameProcessStarted += SharedUILogic_GameProcessStarted;
             GameProcessLogic.GameProcessExited += SharedUILogic_GameProcessExited;
-
-            explanation.CenterOnParent();
-
-            window.CenterOnParent();
 
             Game.TargetElapsedTime = TimeSpan.FromMilliseconds(1000.0 / UserINISettings.Instance.ClientFPS);
 
