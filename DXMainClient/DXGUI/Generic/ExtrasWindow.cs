@@ -10,7 +10,7 @@ using System.Diagnostics;
 
 namespace DTAClient.DXGUI.Generic
 {
-    public class ExtrasWindow : XNAWindow
+    public class ExtrasWindow : INItializableWindow
     {
         public ExtrasWindow(WindowManager windowManager) : base(windowManager)
         {
@@ -23,36 +23,27 @@ namespace DTAClient.DXGUI.Generic
             ClientRectangle = new Rectangle(0, 0, 284, 190);
             BackgroundTexture = AssetLoader.LoadTexture("extrasMenu.png");
 
-            var btnExStatistics = new XNAClientButton(WindowManager);
-            btnExStatistics.Name = "btnExStatistics";
-            btnExStatistics.ClientRectangle = new Rectangle(76, 17, UIDesignConstants.BUTTON_WIDTH_133, UIDesignConstants.BUTTON_HEIGHT);
-            btnExStatistics.Text = "Statistics".L10N("Client:Main:Statistics");
-            btnExStatistics.LeftClick += BtnExStatistics_LeftClick;
-
-            var btnExMapEditor = new XNAClientButton(WindowManager);
-            btnExMapEditor.Name = "btnExMapEditor";
-            btnExMapEditor.ClientRectangle = new Rectangle(76, 59, UIDesignConstants.BUTTON_WIDTH_133, UIDesignConstants.BUTTON_HEIGHT);
-            btnExMapEditor.Text = "Map Editor".L10N("Client:Main:MapEditor");
-            btnExMapEditor.LeftClick += BtnExMapEditor_LeftClick;
-
-            var btnExCredits = new XNAClientButton(WindowManager);
-            btnExCredits.Name = "btnExCredits";
-            btnExCredits.ClientRectangle = new Rectangle(76, 101, UIDesignConstants.BUTTON_WIDTH_133, UIDesignConstants.BUTTON_HEIGHT);
-            btnExCredits.Text = "Credits".L10N("Client:Main:Credits");
-            btnExCredits.LeftClick += BtnExCredits_LeftClick;
-
-            var btnExCancel = new XNAClientButton(WindowManager);
-            btnExCancel.Name = "btnExCancel";
-            btnExCancel.ClientRectangle = new Rectangle(76, 160, UIDesignConstants.BUTTON_WIDTH_133, UIDesignConstants.BUTTON_HEIGHT);
-            btnExCancel.Text = "Cancel".L10N("Client:Main:ButtonCancel");
-            btnExCancel.LeftClick += BtnExCancel_LeftClick;
-
-            AddChild(btnExStatistics);
-            AddChild(btnExMapEditor);
-            AddChild(btnExCredits);
-            AddChild(btnExCancel);
-
             base.Initialize();
+
+            XNAClientButton btnExStatistics;
+            btnExStatistics = FindChild<XNAClientButton>(nameof(btnExStatistics), true);
+            if (btnExStatistics != null)
+                btnExStatistics.LeftClick += BtnExStatistics_LeftClick;
+
+            XNAClientButton btnExMapEditor;
+            btnExMapEditor = FindChild<XNAClientButton>(nameof(btnExMapEditor), true);
+            if (btnExMapEditor != null)
+                btnExMapEditor.LeftClick += BtnExMapEditor_LeftClick;
+
+            XNAClientButton btnExCredits;
+            btnExCredits = FindChild<XNAClientButton>(nameof(btnExCredits), true);
+            if (btnExCredits != null)
+                btnExCredits.LeftClick += BtnExCredits_LeftClick;
+
+            XNAClientButton btnExCancel;
+            btnExCancel = FindChild<XNAClientButton>(nameof(btnExCancel), true);
+            if (btnExCancel != null)
+                btnExCancel.LeftClick += BtnExCancel_LeftClick;
 
             CenterOnParent();
         }
