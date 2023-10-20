@@ -250,6 +250,7 @@ namespace DTAClient.DXGUI
                             .AddTransientXnaControl<XNAPanel>()
                             .AddTransientXnaControl<XNAProgressBar>()
                             .AddTransientXnaControl<XNASuggestionTextBox>()
+                            .AddTransientXnaControl<XNATextBlock>()
                             .AddTransientXnaControl<XNATextBox>()
                             .AddTransientXnaControl<XNATrackbar>()
                             .AddTransientXnaControl<XNAChatTextBox>()

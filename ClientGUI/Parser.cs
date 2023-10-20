@@ -278,6 +278,12 @@ namespace ClientGUI
                     return GetControl(paramName).Bottom;
                 case "getRight":
                     return GetControl(paramName).Right;
+                case "getTextWidth":
+                    var controlW = (XNALabel)GetControl(paramName);
+                    return (int)Renderer.GetTextDimensions(controlW.Text, controlW.FontIndex).X;
+                case "getTextHeight":
+                    var controlH = (XNALabel)GetControl(paramName);
+                    return (int)Renderer.GetTextDimensions(controlH.Text, controlH.FontIndex).Y;
                 case "horizontalCenterOnParent":
                     parsingControl.CenterOnParentHorizontally();
                     return parsingControl.X;
