@@ -16,7 +16,7 @@ using Rampastring.XNAUI;
 
 namespace DTAClient.DXGUI.Generic
 {
-    public class LoadingScreen : XNAWindow
+    public class LoadingScreen : INItializableWindow
     {
         public LoadingScreen(
             CnCNetManager cncnetManager,
