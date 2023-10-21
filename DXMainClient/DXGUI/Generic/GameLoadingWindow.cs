@@ -16,7 +16,7 @@ namespace DTAClient.DXGUI.Generic
     /// <summary>
     /// A window for loading saved singleplayer games.
     /// </summary>
-    public class GameLoadingWindow : XNAWindow
+    public class GameLoadingWindow : INItializableWindow
     {
         private const string SAVED_GAMES_DIRECTORY = "Saved Games";
 
@@ -42,42 +42,24 @@ namespace DTAClient.DXGUI.Generic
             ClientRectangle = new Rectangle(0, 0, 600, 380);
             CenterOnParent();
 
-            lbSaveGameList = new XNAMultiColumnListBox(WindowManager);
-            lbSaveGameList.Name = nameof(lbSaveGameList);
-            lbSaveGameList.ClientRectangle = new Rectangle(13, 13, 574, 317);
+            base.Initialize();
+
+            lbSaveGameList = FindChild<XNAMultiColumnListBox>(nameof(lbSaveGameList));
             lbSaveGameList.AddColumn("SAVED GAME NAME".L10N("Client:Main:SavedGameNameColumnHeader"), 400);
             lbSaveGameList.AddColumn("DATE / TIME".L10N("Client:Main:SavedGameDateTimeColumnHeader"), 174);
-            lbSaveGameList.BackgroundTexture = AssetLoader.CreateTexture(new Color(0, 0, 0, 128), 1, 1);
-            lbSaveGameList.PanelBackgroundDrawMode = PanelBackgroundImageDrawMode.STRETCHED;
             lbSaveGameList.SelectedIndexChanged += ListBox_SelectedIndexChanged;
             lbSaveGameList.AllowKeyboardInput = true;
 
-            btnLaunch = new XNAClientButton(WindowManager);
-            btnLaunch.Name = nameof(btnLaunch);
-            btnLaunch.ClientRectangle = new Rectangle(125, 345, 110, 23);
-            btnLaunch.Text = "Load".L10N("Client:Main:ButtonLoad");
+            btnLaunch = FindChild<XNAClientButton>(nameof(btnLaunch));
             btnLaunch.AllowClick = false;
             btnLaunch.LeftClick += BtnLaunch_LeftClick;
 
-            btnDelete = new XNAClientButton(WindowManager);
-            btnDelete.Name = nameof(btnDelete);
-            btnDelete.ClientRectangle = new Rectangle(btnLaunch.Right + 10, btnLaunch.Y, 110, 23);
-            btnDelete.Text = "Delete".L10N("Client:Main:ButtonDelete");
+            btnDelete = FindChild<XNAClientButton>(nameof(btnDelete));
             btnDelete.AllowClick = false;
             btnDelete.LeftClick += BtnDelete_LeftClick;
 
-            btnCancel = new XNAClientButton(WindowManager);
-            btnCancel.Name = nameof(btnCancel);
-            btnCancel.ClientRectangle = new Rectangle(btnDelete.Right + 10, btnLaunch.Y, 110, 23);
-            btnCancel.Text = "Cancel".L10N("Client:Main:ButtonCancel");
+            btnCancel = FindChild<XNAClientButton>(nameof(btnCancel));
             btnCancel.LeftClick += BtnCancel_LeftClick;
-
-            AddChild(lbSaveGameList);
-            AddChild(btnLaunch);
-            AddChild(btnDelete);
-            AddChild(btnCancel);
-
-            base.Initialize();
 
             ListSaves();
         }
