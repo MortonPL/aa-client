@@ -28,7 +28,7 @@ namespace DTAClient.DXGUI.Generic
     /// <summary>
     /// The main menu of the client.
     /// </summary>
-    class MainMenu : XNAWindow, ISwitchable
+    class MainMenu : INItializableWindow, ISwitchable
     {
         private const float MEDIA_PLAYER_VOLUME_FADE_STEP = 0.01f;
         private const float MEDIA_PLAYER_VOLUME_EXIT_FADE_STEP = 0.025f;
@@ -152,127 +152,68 @@ namespace DTAClient.DXGUI.Generic
 
             WindowManager.CenterControlOnScreen(this);
 
-            btnNewCampaign = new XNAClientButton(WindowManager);
-            btnNewCampaign.Name = nameof(btnNewCampaign);
-            btnNewCampaign.IdleTexture = AssetLoader.LoadTexture("MainMenu/campaign.png");
-            btnNewCampaign.HoverTexture = AssetLoader.LoadTexture("MainMenu/campaign_c.png");
-            btnNewCampaign.HoverSoundEffect = new EnhancedSoundEffect("MainMenu/button.wav");
+            base.Initialize();
+
+            btnNewCampaign = FindChild<XNAClientButton>(nameof(btnNewCampaign));
             btnNewCampaign.LeftClick += BtnNewCampaign_LeftClick;
 
-            btnLoadGame = new XNAClientButton(WindowManager);
-            btnLoadGame.Name = nameof(btnLoadGame);
-            btnLoadGame.IdleTexture = AssetLoader.LoadTexture("MainMenu/loadmission.png");
-            btnLoadGame.HoverTexture = AssetLoader.LoadTexture("MainMenu/loadmission_c.png");
-            btnLoadGame.HoverSoundEffect = new EnhancedSoundEffect("MainMenu/button.wav");
+            btnLoadGame = FindChild<XNAClientButton>(nameof(btnLoadGame));
             btnLoadGame.LeftClick += BtnLoadGame_LeftClick;
 
-            btnSkirmish = new XNAClientButton(WindowManager);
-            btnSkirmish.Name = nameof(btnSkirmish);
-            btnSkirmish.IdleTexture = AssetLoader.LoadTexture("MainMenu/skirmish.png");
-            btnSkirmish.HoverTexture = AssetLoader.LoadTexture("MainMenu/skirmish_c.png");
-            btnSkirmish.HoverSoundEffect = new EnhancedSoundEffect("MainMenu/button.wav");
+            btnSkirmish = FindChild<XNAClientButton>(nameof(btnSkirmish));
             btnSkirmish.LeftClick += BtnSkirmish_LeftClick;
 
-            btnCnCNet = new XNAClientButton(WindowManager);
-            btnCnCNet.Name = nameof(btnCnCNet);
-            btnCnCNet.IdleTexture = AssetLoader.LoadTexture("MainMenu/cncnet.png");
-            btnCnCNet.HoverTexture = AssetLoader.LoadTexture("MainMenu/cncnet_c.png");
-            btnCnCNet.HoverSoundEffect = new EnhancedSoundEffect("MainMenu/button.wav");
+            btnCnCNet = FindChild<XNAClientButton>(nameof(btnCnCNet));
             btnCnCNet.LeftClick += BtnCnCNet_LeftClick;
 
-            btnLan = new XNAClientButton(WindowManager);
-            btnLan.Name = nameof(btnLan);
-            btnLan.IdleTexture = AssetLoader.LoadTexture("MainMenu/lan.png");
-            btnLan.HoverTexture = AssetLoader.LoadTexture("MainMenu/lan_c.png");
-            btnLan.HoverSoundEffect = new EnhancedSoundEffect("MainMenu/button.wav");
+            btnLan = FindChild<XNAClientButton>(nameof(btnLan));
             btnLan.LeftClick += BtnLan_LeftClick;
 
-            btnOptions = new XNAClientButton(WindowManager);
-            btnOptions.Name = nameof(btnOptions);
-            btnOptions.IdleTexture = AssetLoader.LoadTexture("MainMenu/options.png");
-            btnOptions.HoverTexture = AssetLoader.LoadTexture("MainMenu/options_c.png");
-            btnOptions.HoverSoundEffect = new EnhancedSoundEffect("MainMenu/button.wav");
+            btnOptions = FindChild<XNAClientButton>(nameof(btnOptions));
             btnOptions.LeftClick += BtnOptions_LeftClick;
 
-            btnMapEditor = new XNAClientButton(WindowManager);
-            btnMapEditor.Name = nameof(btnMapEditor);
-            btnMapEditor.IdleTexture = AssetLoader.LoadTexture("MainMenu/mapeditor.png");
-            btnMapEditor.HoverTexture = AssetLoader.LoadTexture("MainMenu/mapeditor_c.png");
-            btnMapEditor.HoverSoundEffect = new EnhancedSoundEffect("MainMenu/button.wav");
+            btnMapEditor = FindChild<XNAClientButton>(nameof(btnMapEditor));
             btnMapEditor.LeftClick += BtnMapEditor_LeftClick;
 
-            btnStatistics = new XNAClientButton(WindowManager);
-            btnStatistics.Name = nameof(btnStatistics);
-            btnStatistics.IdleTexture = AssetLoader.LoadTexture("MainMenu/statistics.png");
-            btnStatistics.HoverTexture = AssetLoader.LoadTexture("MainMenu/statistics_c.png");
-            btnStatistics.HoverSoundEffect = new EnhancedSoundEffect("MainMenu/button.wav");
+            btnStatistics = FindChild<XNAClientButton>(nameof(btnStatistics));
             btnStatistics.LeftClick += BtnStatistics_LeftClick;
 
-            btnCredits = new XNAClientButton(WindowManager);
-            btnCredits.Name = nameof(btnCredits);
-            btnCredits.IdleTexture = AssetLoader.LoadTexture("MainMenu/credits.png");
-            btnCredits.HoverTexture = AssetLoader.LoadTexture("MainMenu/credits_c.png");
-            btnCredits.HoverSoundEffect = new EnhancedSoundEffect("MainMenu/button.wav");
+            btnCredits = FindChild<XNAClientButton>(nameof(btnCredits));
             btnCredits.LeftClick += BtnCredits_LeftClick;
 
-            btnExtras = new XNAClientButton(WindowManager);
-            btnExtras.Name = nameof(btnExtras);
-            btnExtras.IdleTexture = AssetLoader.LoadTexture("MainMenu/extras.png");
-            btnExtras.HoverTexture = AssetLoader.LoadTexture("MainMenu/extras_c.png");
-            btnExtras.HoverSoundEffect = new EnhancedSoundEffect("MainMenu/button.wav");
+            btnExtras = FindChild<XNAClientButton>(nameof(btnExtras), true);
+            if (btnExtras == null)
+            {
+                btnExtras = new(WindowManager);
+                btnExtras.Disable();
+            }
             btnExtras.LeftClick += BtnExtras_LeftClick;
 
-            var btnExit = new XNAClientButton(WindowManager);
-            btnExit.Name = nameof(btnExit);
-            btnExit.IdleTexture = AssetLoader.LoadTexture("MainMenu/exitgame.png");
-            btnExit.HoverTexture = AssetLoader.LoadTexture("MainMenu/exitgame_c.png");
-            btnExit.HoverSoundEffect = new EnhancedSoundEffect("MainMenu/button.wav");
+            XNAClientButton btnExit;
+            btnExit = FindChild<XNAClientButton>(nameof(btnExit));
             btnExit.LeftClick += BtnExit_LeftClick;
 
-            XNALabel lblCnCNetStatus = new XNALabel(WindowManager);
-            lblCnCNetStatus.Name = nameof(lblCnCNetStatus);
-            lblCnCNetStatus.Text = "DTA players on CnCNet:".L10N("Client:Main:CnCNetOnlinePlayersCountText");
-            lblCnCNetStatus.ClientRectangle = new Rectangle(12, 9, 0, 0);
-
-            lblCnCNetPlayerCount = new XNALabel(WindowManager);
-            lblCnCNetPlayerCount.Name = nameof(lblCnCNetPlayerCount);
+            lblCnCNetPlayerCount = FindChild<XNALabel>(nameof(lblCnCNetPlayerCount));
             lblCnCNetPlayerCount.Text = "-";
 
-            lblVersion = new XNALinkLabel(WindowManager);
-            lblVersion.Name = nameof(lblVersion);
+            lblVersion = FindChild<XNALinkLabel>(nameof(lblVersion));
             lblVersion.LeftClick += LblVersion_LeftClick;
+            lblVersion.Disable();
 
-            lblUpdateStatus = new XNALinkLabel(WindowManager);
-            lblUpdateStatus.Name = nameof(lblUpdateStatus);
+            lblUpdateStatus = FindChild<XNALinkLabel>(nameof(lblUpdateStatus));
             lblUpdateStatus.LeftClick += LblUpdateStatus_LeftClick;
-            lblUpdateStatus.ClientRectangle = new Rectangle(0, 0, UIDesignConstants.BUTTON_WIDTH_160, 20);
-
-            AddChild(btnNewCampaign);
-            AddChild(btnLoadGame);
-            AddChild(btnSkirmish);
-            AddChild(btnCnCNet);
-            AddChild(btnLan);
-            AddChild(btnOptions);
-            AddChild(btnMapEditor);
-            AddChild(btnStatistics);
-            AddChild(btnCredits);
-            AddChild(btnExtras);
-            AddChild(btnExit);
-            AddChild(lblCnCNetStatus);
-            AddChild(lblCnCNetPlayerCount);
+            lblUpdateStatus.Disable();
 
             if (!ClientConfiguration.Instance.ModMode)
             {
                 // ModMode disables version tracking and the updater if it's enabled
 
-                AddChild(lblVersion);
-                AddChild(lblUpdateStatus);
+                lblVersion.Enable();
+                lblUpdateStatus.Enable();
 
                 Updater.FileIdentifiersUpdated += Updater_FileIdentifiersUpdated;
                 Updater.OnCustomComponentsOutdated += Updater_OnCustomComponentsOutdated;
             }
-
-            base.Initialize(); // Read control attributes from INI
 
             innerPanel = new MainMenuDarkeningPanel(WindowManager, discordHandler, mapLoader);
             innerPanel.ClientRectangle = new Rectangle(0, 0,
