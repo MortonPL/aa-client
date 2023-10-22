@@ -11,7 +11,7 @@ namespace DTAClient.DXGUI.Generic
     /// <summary>
     /// A window that asks the user whether they want to update their game.
     /// </summary>
-    public class UpdateQueryWindow : XNAWindow
+    public class UpdateQueryWindow : INItializableWindow
     {
         public delegate void UpdateAcceptedEventHandler(object sender, EventArgs e);
         public event UpdateAcceptedEventHandler UpdateAccepted;
@@ -34,42 +34,24 @@ namespace DTAClient.DXGUI.Generic
             ClientRectangle = new Rectangle(0, 0, 251, 140);
             BackgroundTexture = AssetLoader.LoadTexture("updatequerybg.png");
 
-            lblDescription = new XNALabel(WindowManager);
-            lblDescription.ClientRectangle = new Rectangle(12, 9, 0, 0);
-            lblDescription.Text = String.Empty;
-            lblDescription.Name = nameof(lblDescription);
+            base.Initialize();
 
-            var lblChangelogLink = new XNALinkLabel(WindowManager);
-            lblChangelogLink.ClientRectangle = new Rectangle(12, 50, 0, 0);
-            lblChangelogLink.Text = "View Changelog".L10N("Client:Main:ViewChangeLog");
-            lblChangelogLink.IdleColor = Color.Goldenrod;
-            lblChangelogLink.Name = nameof(lblChangelogLink);
+            lblDescription = FindChild<XNALabel>(nameof(lblDescription));
+
+            XNALinkLabel lblChangelogLink;
+            lblChangelogLink = FindChild<XNALinkLabel>(nameof(lblChangelogLink));
             lblChangelogLink.LeftClick += LblChangelogLink_LeftClick;
 
-            lblUpdateSize = new XNALabel(WindowManager);
-            lblUpdateSize.ClientRectangle = new Rectangle(12, 80, 0, 0);
-            lblUpdateSize.Text = String.Empty;
-            lblUpdateSize.Name = nameof(lblUpdateSize);
+            lblUpdateSize = FindChild<XNALabel>(nameof(lblUpdateSize));
 
-            var btnYes = new XNAClientButton(WindowManager);
+            XNAClientButton btnYes;
+            btnYes = FindChild<XNAClientButton>(nameof(btnYes));
             btnYes.ClientRectangle = new Rectangle(12, 110, 75, 23);
-            btnYes.Text = "Yes".L10N("Client:Main:ButtonYes");
             btnYes.LeftClick += BtnYes_LeftClick;
-            btnYes.Name = nameof(btnYes);
 
-            var btnNo = new XNAClientButton(WindowManager);
-            btnNo.ClientRectangle = new Rectangle(164, 110, 75, 23);
-            btnNo.Text = "No".L10N("Client:Main:ButtonNo");
+            XNAClientButton btnNo;
+            btnNo = FindChild<XNAClientButton>(nameof(btnNo));
             btnNo.LeftClick += BtnNo_LeftClick;
-            btnNo.Name = nameof(btnNo);
-
-            AddChild(lblDescription);
-            AddChild(lblChangelogLink);
-            AddChild(lblUpdateSize);
-            AddChild(btnYes);
-            AddChild(btnNo);
-
-            base.Initialize();
 
             CenterOnParent();
         }
