@@ -287,6 +287,11 @@ namespace ClientGUI
                 case "horizontalCenterOnParent":
                     parsingControl.CenterOnParentHorizontally();
                     return parsingControl.X;
+                case "verticalCenterOnParent":
+                    var x = parsingControl.X;
+                    parsingControl.CenterOnParent();
+                    parsingControl.X = x;
+                    return parsingControl.Y;
                 default:
                     throw new INIConfigException("Unknown function " + functionName + " in expression " + Input);
             }

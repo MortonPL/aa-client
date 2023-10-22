@@ -19,7 +19,7 @@ namespace DTAClient.DXGUI.Generic
     /// <summary>
     /// A top bar that allows switching between various client windows.
     /// </summary>
-    public class TopBar : XNAPanel
+    public class TopBar : INItializableWindow
     {
         /// <summary>
         /// The number of seconds that the top bar will stay down after it has
@@ -132,90 +132,48 @@ namespace DTAClient.DXGUI.Generic
             BackgroundTexture = AssetLoader.CreateTexture(Color.Black, 1, 1);
             DrawBorders = false;
 
-            btnMainButton = new XNAClientButton(WindowManager);
-            btnMainButton.Name = "btnMainButton";
-            btnMainButton.ClientRectangle = new Rectangle(12, 9, UIDesignConstants.BUTTON_WIDTH_160, UIDesignConstants.BUTTON_HEIGHT);
-            btnMainButton.Text = "Main Menu (F2)".L10N("Client:Main:MainMenuF2");
+            base.Initialize();
+
+            btnMainButton = FindChild<XNAClientButton>(nameof(btnMainButton));
             btnMainButton.LeftClick += BtnMainButton_LeftClick;
 
-            btnCnCNetLobby = new XNAClientButton(WindowManager);
-            btnCnCNetLobby.Name = "btnCnCNetLobby";
-            btnCnCNetLobby.ClientRectangle = new Rectangle(184, 9, UIDesignConstants.BUTTON_WIDTH_160, UIDesignConstants.BUTTON_HEIGHT);
-            btnCnCNetLobby.Text = "CnCNet Lobby (F3)".L10N("Client:Main:LobbyF3");
+            btnCnCNetLobby = FindChild<XNAClientButton>(nameof(btnCnCNetLobby));
             btnCnCNetLobby.LeftClick += BtnCnCNetLobby_LeftClick;
 
-            btnPrivateMessages = new XNAClientButton(WindowManager);
-            btnPrivateMessages.Name = "btnPrivateMessages";
-            btnPrivateMessages.ClientRectangle = new Rectangle(356, 9, UIDesignConstants.BUTTON_WIDTH_160, UIDesignConstants.BUTTON_HEIGHT);
-            btnPrivateMessages.Text = DEFAULT_PM_BTN_LABEL;
+            btnPrivateMessages = FindChild<XNAClientButton>(nameof(btnPrivateMessages));
             btnPrivateMessages.LeftClick += BtnPrivateMessages_LeftClick;
 
-            lblDate = new XNALabel(WindowManager);
-            lblDate.Name = "lblDate";
-            lblDate.FontIndex = 1;
+            lblDate = FindChild<XNALabel>(nameof(lblDate));
             lblDate.Text = Renderer.GetSafeString(DateTime.Now.ToShortDateString(), lblDate.FontIndex);
-            lblDate.ClientRectangle = new Rectangle(Width -
-                (int)Renderer.GetTextDimensions(lblDate.Text, lblDate.FontIndex).X - 12, 18,
-                lblDate.Width, lblDate.Height);
 
-            lblTime = new XNALabel(WindowManager);
-            lblTime.Name = "lblTime";
-            lblTime.FontIndex = 1;
+            lblTime = FindChild<XNALabel>(nameof(lblTime));
             lblTime.Text = Renderer.GetSafeString(new DateTime(1, 1, 1, 23, 59, 59).ToLongTimeString(), lblTime.FontIndex);
-            lblTime.ClientRectangle = new Rectangle(Width -
-                (int)Renderer.GetTextDimensions(lblTime.Text, lblTime.FontIndex).X - 12, 4,
-                lblTime.Width, lblTime.Height);
 
-            btnLogout = new XNAClientButton(WindowManager);
-            btnLogout.Name = "btnLogout";
-            btnLogout.ClientRectangle = new Rectangle(lblDate.X - 87, 9, 75, 23);
-            btnLogout.FontIndex = 1;
-            btnLogout.Text = "Log Out".L10N("Client:Main:TopBarLogOut");
+            btnLogout = FindChild<XNAClientButton>(nameof(btnLogout));
             btnLogout.AllowClick = false;
             btnLogout.LeftClick += BtnLogout_LeftClick;
 
-            btnOptions = new XNAClientButton(WindowManager);
-            btnOptions.Name = "btnOptions";
-            btnOptions.ClientRectangle = new Rectangle(btnLogout.X - 122, 9, 110, 23);
-            btnOptions.Text = "Options (F12)".L10N("Client:Main:OptionsF12");
+            btnOptions = FindChild<XNAClientButton>(nameof(btnOptions));
             btnOptions.LeftClick += BtnOptions_LeftClick;
 
-            lblConnectionStatus = new XNALabel(WindowManager);
-            lblConnectionStatus.Name = "lblConnectionStatus";
-            lblConnectionStatus.FontIndex = 1;
-            lblConnectionStatus.Text = "OFFLINE".L10N("Client:Main:StatusOffline");
+            lblConnectionStatus = FindChild<XNALabel>(nameof(lblConnectionStatus));
 
-            AddChild(btnMainButton);
-            AddChild(btnCnCNetLobby);
-            AddChild(btnPrivateMessages);
-            AddChild(btnOptions);
-            AddChild(lblTime);
-            AddChild(lblDate);
-            AddChild(btnLogout);
-            AddChild(lblConnectionStatus);
+            lblCnCNetStatus = FindChild<XNALabel>(nameof(lblCnCNetStatus));
+            lblCnCNetStatus.Disable();
+            lblCnCNetPlayerCount = FindChild<XNALabel>(nameof(lblCnCNetPlayerCount));
+            lblCnCNetPlayerCount.Disable();
 
             if (ClientConfiguration.Instance.DisplayPlayerCountInTopBar)
             {
-                lblCnCNetStatus = new XNALabel(WindowManager);
-                lblCnCNetStatus.Name = "lblCnCNetStatus";
-                lblCnCNetStatus.FontIndex = 1;
+                lblCnCNetStatus.Enable();
+                lblCnCNetPlayerCount.Enable();
                 lblCnCNetStatus.Text = ClientConfiguration.Instance.LocalGame.ToUpper() + " " + "PLAYERS ONLINE:".L10N("Client:Main:OnlinePlayersNumber");
-                lblCnCNetPlayerCount = new XNALabel(WindowManager);
-                lblCnCNetPlayerCount.Name = "lblCnCNetPlayerCount";
-                lblCnCNetPlayerCount.FontIndex = 1;
                 lblCnCNetPlayerCount.Text = "-";
-                lblCnCNetPlayerCount.ClientRectangle = new Rectangle(btnOptions.X - 50, 11, lblCnCNetPlayerCount.Width, lblCnCNetPlayerCount.Height);
                 lblCnCNetStatus.ClientRectangle = new Rectangle(lblCnCNetPlayerCount.X - lblCnCNetStatus.Width - 6, 11, lblCnCNetStatus.Width, lblCnCNetStatus.Height);
-                AddChild(lblCnCNetStatus);
-                AddChild(lblCnCNetPlayerCount);
                 CnCNetPlayerCountTask.CnCNetGameCountUpdated += CnCNetInfoController_CnCNetGameCountUpdated;
                 cncnetPlayerCountCancellationSource = new CancellationTokenSource();
                 CnCNetPlayerCountTask.InitializeService(cncnetPlayerCountCancellationSource);
             }
-
-            lblConnectionStatus.CenterOnParent();
-
-            base.Initialize();
 
             Keyboard.OnKeyPressed += Keyboard_OnKeyPressed;
             connectionManager.Connected += ConnectionManager_Connected;
