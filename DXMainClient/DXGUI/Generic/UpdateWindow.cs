@@ -15,7 +15,7 @@ namespace DTAClient.DXGUI.Generic
     /// <summary>
     /// The update window, displaying the update progress to the user.
     /// </summary>
-    public class UpdateWindow : XNAWindow
+    public class UpdateWindow : INItializableWindow
     {
         public delegate void UpdateCancelEventHandler(object sender, EventArgs e);
         public event UpdateCancelEventHandler UpdateCancelled;
@@ -67,71 +67,28 @@ namespace DTAClient.DXGUI.Generic
             ClientRectangle = new Rectangle(0, 0, 446, 270);
             BackgroundTexture = AssetLoader.LoadTexture("updaterbg.png");
 
-            lblDescription = new XNALabel(WindowManager);
-            lblDescription.Text = string.Empty;
-            lblDescription.ClientRectangle = new Rectangle(12, 9, 0, 0);
-            lblDescription.Name = "lblDescription";
+            base.Initialize();
 
-            var lblCurrentFileProgressPercentage = new XNALabel(WindowManager);
-            lblCurrentFileProgressPercentage.Text = "Progress percentage of current file:".L10N("Client:Main:CurrentFileProgressPercentage");
-            lblCurrentFileProgressPercentage.ClientRectangle = new Rectangle(12, 90, 0, 0);
-            lblCurrentFileProgressPercentage.Name = "lblCurrentFileProgressPercentage";
+            lblDescription = FindChild<XNALabel>(nameof(lblDescription));
+            lblCurrentFileProgressPercentageValue = FindChild<XNALabel>(nameof(lblCurrentFileProgressPercentageValue));
 
-            lblCurrentFileProgressPercentageValue = new XNALabel(WindowManager);
-            lblCurrentFileProgressPercentageValue.Text = "0%";
-            lblCurrentFileProgressPercentageValue.ClientRectangle = new Rectangle(409, lblCurrentFileProgressPercentage.Y, 0, 0);
-            lblCurrentFileProgressPercentageValue.Name = "lblCurrentFileProgressPercentageValue";
-
-            prgCurrentFile = new XNAProgressBar(WindowManager);
-            prgCurrentFile.Name = "prgCurrentFile";
+            prgCurrentFile = FindChild<XNAProgressBar>(nameof(prgCurrentFile));
             prgCurrentFile.Maximum = 100;
-            prgCurrentFile.ClientRectangle = new Rectangle(12, 110, 422, 30);
-            //prgCurrentFile.BorderColor = UISettings.WindowBorderColor;
             prgCurrentFile.SmoothForwardTransition = true;
             prgCurrentFile.SmoothTransitionRate = 10;
 
-            lblCurrentFile = new XNALabel(WindowManager);
-            lblCurrentFile.Name = "lblCurrentFile";
-            lblCurrentFile.ClientRectangle = new Rectangle(12, 142, 0, 0);
+            lblCurrentFile = FindChild<XNALabel>(nameof(lblCurrentFile));
 
-            var lblTotalProgressPercentage = new XNALabel(WindowManager);
-            lblTotalProgressPercentage.Text = "Total progress percentage:".L10N("Client:Main:TotalProgressPercentage");
-            lblTotalProgressPercentage.ClientRectangle = new Rectangle(12, 170, 0, 0);
-            lblTotalProgressPercentage.Name = "lblTotalProgressPercentage";
+            lblTotalProgressPercentageValue = FindChild<XNALabel>(nameof(lblTotalProgressPercentageValue));
 
-            lblTotalProgressPercentageValue = new XNALabel(WindowManager);
-            lblTotalProgressPercentageValue.Text = "0%";
-            lblTotalProgressPercentageValue.ClientRectangle = new Rectangle(409, lblTotalProgressPercentage.Y, 0, 0);
-            lblTotalProgressPercentageValue.Name = "lblTotalProgressPercentageValue";
-
-            prgTotal = new XNAProgressBar(WindowManager);
-            prgTotal.Name = "prgTotal";
+            prgTotal = FindChild<XNAProgressBar>(nameof(prgTotal));
             prgTotal.Maximum = 100;
-            prgTotal.ClientRectangle = new Rectangle(12, 190, prgCurrentFile.Width, prgCurrentFile.Height);
-            //prgTotal.BorderColor = UISettings.WindowBorderColor;
 
-            lblUpdaterStatus = new XNALabel(WindowManager);
-            lblUpdaterStatus.Name = "lblUpdaterStatus";
-            lblUpdaterStatus.Text = "Preparing".L10N("Client:Main:StatusPreparing");
-            lblUpdaterStatus.ClientRectangle = new Rectangle(12, 240, 0, 0);
+            lblUpdaterStatus = FindChild<XNALabel>(nameof(lblUpdaterStatus));
 
-            var btnCancel = new XNAClientButton(WindowManager);
-            btnCancel.ClientRectangle = new Rectangle(301, 240, UIDesignConstants.BUTTON_WIDTH_133, UIDesignConstants.BUTTON_HEIGHT);
-            btnCancel.Text = "Cancel".L10N("Client:Main:ButtonCancel");
+            XNAClientButton btnCancel;
+            btnCancel = FindChild<XNAClientButton>(nameof(btnCancel));
             btnCancel.LeftClick += BtnCancel_LeftClick;
-
-            AddChild(lblDescription);
-            AddChild(lblCurrentFileProgressPercentage);
-            AddChild(lblCurrentFileProgressPercentageValue);
-            AddChild(prgCurrentFile);
-            AddChild(lblCurrentFile);
-            AddChild(lblTotalProgressPercentage);
-            AddChild(lblTotalProgressPercentageValue);
-            AddChild(prgTotal);
-            AddChild(lblUpdaterStatus);
-            AddChild(btnCancel);
-
-            base.Initialize(); // Read theme settings from INI
 
             CenterOnParent();
 
